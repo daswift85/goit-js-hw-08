@@ -7,7 +7,7 @@ const storageKey = 'feedback-form-state';
 
 // Отслеживание изменений в форме и сохранение их в локальное хранилище
 const saveState = throttle(() => {
-  const state = { email: emailInput.value, message: messageInput.value };
+  const state = { email: emailInput.value.trim(), message: messageInput.value.trim() };
   localStorage.setItem(storageKey, JSON.stringify(state));
 }, 500);
 
@@ -25,16 +25,20 @@ if (storedState) {
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
-// Вывод объекта с данными в консоль
-  const state = { email: emailInput.value, message: messageInput.value };
+  // Проверка заполненности полей формы
+  if (!emailInput.value.trim() || !messageInput.value.trim()) {
+    alert('Пожалуйста, заполните все поля формы!');
+    return;
+  }
+
+  // Вывод объекта с данными в консоль
+  const state = { email: emailInput.value.trim(), message: messageInput.value.trim() };
   console.log(state);
-  
+
   // Очистка хранилища и полей формы
   localStorage.removeItem(storageKey);
   emailInput.value = '';
   messageInput.value = '';
-
-  
 });
 
 
